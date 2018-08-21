@@ -1,25 +1,10 @@
+const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
 const express = require('express');
 const mongoose = require('mongoose');
-const Joi = require('joi');
 const router = express.Router();
-
-const genreSchema = new mongoose.Schema({
-	genre: {type: String, required: true}
-});
-
-const Genre = mongoose.model('Genre', genreSchema);
-
-function isMongoIdValid(id){
-	if (id.match(/^[0-9a-fA-F]{24}$/)) return true;
-	else return false;
-}
-
-function validateGenre(genre) {
-  const schema = {
-    genre: Joi.string().min(3).required()
-  };
-  return Joi.validate(genre, schema);
-}
+const {isMongoIdValid} = require('../utils/functions');
+const {Genre, validateGenre} = require('../models/genres');
 
 router.get('/', async (req,res) => {
 	const genres = await Genre.find().sort('genre');
@@ -37,7 +22,7 @@ router.get('/:id', async (req, res) => {
 	res.send (genre);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
 	const { error } = validateGenre(req.body); 
    	if (error) return res.status(400).send(error.details[0].message);
 	try{
@@ -65,7 +50,7 @@ router.post('/', async (req, res) => {
 	}
 });
 
- router.delete('/:id', async (req, res) => {
+ router.delete('/:id', [auth, admin], async (req, res) => {
  	if (!isMongoIdValid(req.params.id)) 
 		return res.status(404).send('Invalid Id');
 	const genre = await Genre.findByIdAndRemove(req.params.id);
