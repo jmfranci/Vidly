@@ -21,10 +21,12 @@
     "bcrypt": "^1.0.3",
     "config": "^2.0.1",
     "express": "^4.16.3",
+    "express-async-errors": "^2.1.0",
     "fawn": "^2.1.5",
     "joi": "^13.1.0",
     "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.10",
-    "mongoose": "^5.0.2"
+    "mongoose": "^5.0.2",
+    "winston-mongodb": "^3.0.0"
   }
 }

@@ -10,13 +10,13 @@ const clientSchema = new mongoose.Schema({
 
 const Client = mongoose.model('Client', clientSchema);
 
-function validateClient(genre) {
+function validateClient(client) {
   const schema = {
     name: Joi.string().min(3).required(),
     isGold: Joi.boolean(),
     phoneNumber: Joi.number().required()
   };
-  return Joi.validate(genre, schema);
+  return Joi.validate(client, schema);
 }
 
 module.exports.validateClient = validateClient;
